@@ -18,13 +18,14 @@ class ImagesTest(unittest.TestCase):
         cls.config = cls.os.config
         cls.image_ref = cls.config.env.image_ref
         cls.flavor_ref = cls.config.env.flavor_ref
+        global create_image_enabled
         create_image_enabled = cls.config.env.create_image_enabled
 
     def _parse_image_id(self, image_ref):
         temp = image_ref.rsplit('/')
         return temp[6]
 
-    @unittest.skipIf(not imaging_enabled,
+    @unittest.skipIf(not create_image_enabled,
                     'Environment unable to create images.')
     @attr(type='smoke')
     def test_create_delete_image(self):

@@ -1,4 +1,3 @@
-from nose.plugins.attrib import attr
 from tempest import openstack
 from tempest.common.utils.data_utils import rand_name
 import tempest.config
@@ -32,6 +31,7 @@ class ImagesMetadataTest(unittest.TestCase):
         meta = {'key1': 'value1', 'key2': 'value2'}
         name = rand_name('image')
         resp, body = self.client.create_image(self.server['id'], name, meta)
+        self.assertEqual(resp.status, 202)
         image_ref = resp['location']
         temp = image_ref.rsplit('/')
         image_id = temp[6]
@@ -71,7 +71,6 @@ class ImagesMetadataTest(unittest.TestCase):
         self.assertEqual('data3', metadata['meta3'])
         self.assertTrue('key1' not in metadata)
 
-        self.servers_client.delete_server(server['id'])
         self.client.delete_image(image['id'])
 
     def test_update_image_metadata(self):
@@ -85,7 +84,7 @@ class ImagesMetadataTest(unittest.TestCase):
         self.assertEqual('alt2', metadata['key2'])
 
     def test_get_image_metadata_item(self):
-        """The value for a specic metadata key should be returned"""
+        """The value for a specific metadata key should be returned"""
         resp, meta = self.client.get_image_metadata_item(self.image['id'],
                                                          'key2')
         self.assertTrue('value2', meta['key2'])
