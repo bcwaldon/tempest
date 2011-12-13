@@ -30,7 +30,7 @@ class ServerActionsTest(unittest.TestCase):
         self.client.wait_for_server_status(self.server['id'], 'ACTIVE')
 
     def tearDown(self):
-        self.client.delete_server(self.id)
+        self.client.delete_server(self.server['id'])
 
     @attr(type='smoke')
     def test_change_server_password(self):
