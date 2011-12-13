@@ -2,10 +2,11 @@ from nose.plugins.attrib import attr
 from tempest import openstack
 from tempest.common.utils.data_utils import rand_name
 import unittest2 as unittest
-import tempest.config
 
-# Some module-level skip conditions
-create_image_enabled = False
+
+def _parse_image_id(image_ref):
+    temp = image_ref.rsplit('/')
+    return temp[6]
 
 
 class ImagesTest(unittest.TestCase):
@@ -18,18 +19,15 @@ class ImagesTest(unittest.TestCase):
         cls.config = cls.os.config
         cls.image_ref = cls.config.env.image_ref
         cls.flavor_ref = cls.config.env.flavor_ref
-        global create_image_enabled
-        create_image_enabled = cls.config.env.create_image_enabled
+        cls.create_image_enabled = cls.config.env.create_image_enabled
 
-    def _parse_image_id(self, image_ref):
-        temp = image_ref.rsplit('/')
-        return temp[6]
-
-    @unittest.skipIf(not create_image_enabled,
-                    'Environment unable to create images.')
     @attr(type='smoke')
     def test_create_delete_image(self):
         """An image for the provided server should be created"""
+
+        if not self.create_image_enabled:
+            self.skip('Environment unable to create images.')
+
         server_name = rand_name('server')
         resp, server = self.servers_client.create_server(server_name,
                                                          self.image_ref,
@@ -40,7 +38,7 @@ class ImagesTest(unittest.TestCase):
         name = rand_name('image')
         meta = {'image_type': 'test'}
         resp, body = self.client.create_image(server['id'], name, meta)
-        image_id = self._parse_image_id(resp['location'])
+        image_id = _parse_image_id(resp['location'])
         self.client.wait_for_image_resp_code(image_id, 200)
         self.client.wait_for_image_status(image_id, 'ACTIVE')
 
