@@ -20,7 +20,7 @@ class ServerMetadataTest(unittest.TestCase):
         cls.server_id = server['id']
 
         #Wait for the server to become active
-        cls.client.wait_for_server_status(cls.server['id'], 'ACTIVE')
+        cls.client.wait_for_server_status(cls.server_id, 'ACTIVE')
 
     @classmethod
     def tearDownClass(cls):
@@ -70,7 +70,7 @@ class ServerMetadataTest(unittest.TestCase):
 
     def test_get_server_metadata_item(self):
         """ The value for a specic metadata key should be returned """
-        resp, meta = self.client.get_server_metadata_item(self.server['id'],
+        resp, meta = self.client.get_server_metadata_item(self.server_id,
                                                           'test2')
         self.assertTrue('value2', meta['test2'])
 
