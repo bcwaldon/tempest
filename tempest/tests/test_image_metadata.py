@@ -25,7 +25,6 @@ class ImagesMetadataTest(unittest.TestCase):
         # Snapshot the server once to save time
         name = rand_name('image')
         resp, _ = cls.client.create_image(cls.server_id, name, {})
-        cls.assertEqual(resp.status, 202)
         cls.image_id = resp['location'].rsplit('/', 1)[1]
 
         cls.client.wait_for_image_resp_code(cls.image_id, 200)
