@@ -59,7 +59,7 @@ class ServerActionsTest(unittest.TestCase):
         meta = {'rebuild': 'server'}
         name = rand_name('server')
         file_contents = 'Test server rebuild.'
-        personality = [{'path': '/etc/asdf',
+        personality = [{'path': '/etc/rebuild.txt',
                        'contents': base64.b64encode(file_contents)}]
 
         resp, rebuilt_server = self.client.rebuild(self.server['id'],
