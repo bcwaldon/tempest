@@ -27,7 +27,7 @@ class ServerMetadataTest(unittest.TestCase):
         cls.client.delete_server(cls.server_id)
 
     def setUp(self):
-        meta = {'test1': 'value1', 'test2': 'value2'}
+        meta = {'key1': 'value1', 'key2': 'value2'}
         resp, _ = self.client.set_server_metadata(self.server_id, meta)
         self.assertEqual(resp.status, 200)
 
@@ -37,7 +37,7 @@ class ServerMetadataTest(unittest.TestCase):
 
         #Verify the expected metadata items are in the list
         self.assertEqual(200, resp.status)
-        expected = {'test1': 'value1', 'test2': 'value2'}
+        expected = {'key1': 'value1', 'key2': 'value2'}
         self.assertEqual(expected, resp_metadata)
 
     def test_set_server_metadata(self):
@@ -71,8 +71,8 @@ class ServerMetadataTest(unittest.TestCase):
     def test_get_server_metadata_item(self):
         """ The value for a specic metadata key should be returned """
         resp, meta = self.client.get_server_metadata_item(self.server_id,
-                                                          'test2')
-        self.assertTrue('value2', meta['test2'])
+                                                          'key2')
+        self.assertTrue('value2', meta['key2'])
 
     def test_set_server_metadata_item(self):
         """The item's value should be updated to the provided value"""
@@ -89,8 +89,8 @@ class ServerMetadataTest(unittest.TestCase):
 
     def test_delete_server_metadata_item(self):
         """The metadata value/key pair should be deleted from the server"""
-        resp, metadata = self.client.delete_server_metadata_item(self.serverid,
-                                                                 'key1')
+        resp, meta = self.client.delete_server_metadata_item(self.server_id,
+                                                             'key1')
         self.assertEqual(204, resp.status)
 
         #Verify the metadata item has been removed
