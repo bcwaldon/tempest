@@ -1,12 +1,15 @@
-from nose.plugins.attrib import attr
-from tempest import openstack
-from tempest.common.utils.data_utils import rand_name
-import unittest2 as unittest
-import tempest.config
 import base64
+
+from nose.plugins.attrib import attr
+import unittest2 as unittest
+
+from tempest.common.utils.data_utils import rand_name
+import tempest.config
+from tempest import openstack
 
 
 class ServerActionsTest(unittest.TestCase):
+
     resize_available = tempest.config.TempestConfig().env.resize_available
 
     @classmethod

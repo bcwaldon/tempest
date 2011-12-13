@@ -1,7 +1,9 @@
 from nose.plugins.attrib import attr
-from tempest import openstack
-from tempest.common.utils.data_utils import rand_name
 import unittest2 as unittest
+
+from tempest.common.utils.data_utils import rand_name
+import tempest.config
+from tempest import openstack
 
 
 def _parse_image_id(image_ref):
@@ -10,6 +12,9 @@ def _parse_image_id(image_ref):
 
 
 class ImagesTest(unittest.TestCase):
+
+    create_image_enabled = tempest.config.TempestConfig().\
+            env.create_image_enabled
 
     @classmethod
     def setUpClass(cls):
@@ -22,12 +27,10 @@ class ImagesTest(unittest.TestCase):
         cls.create_image_enabled = cls.config.env.create_image_enabled
 
     @attr(type='smoke')
+    @unittest.skipUnless(create_image_enabled,
+                         'Environment unable to create images.')
     def test_create_delete_image(self):
         """An image for the provided server should be created"""
-
-        if not self.create_image_enabled:
-            self.skip('Environment unable to create images.')
-
         server_name = rand_name('server')
         resp, server = self.servers_client.create_server(server_name,
                                                          self.image_ref,
